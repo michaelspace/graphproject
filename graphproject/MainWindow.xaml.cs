@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace graphproject
 {
     /// <summary>
@@ -24,5 +25,30 @@ namespace graphproject
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Cursor = Cursors.Cross;
+        }
+
+        private void DodajWierzcholek(object sender, MouseButtonEventArgs e)
+        {
+            if (this.Cursor == Cursors.Cross)
+            {
+                Ellipse circle = new Ellipse();
+                circle.Width = 30;
+                circle.Height = 30;
+                circle.Stroke = new SolidColorBrush(Colors.Black);
+                circle.StrokeThickness = 1;
+                circle.Fill = new SolidColorBrush(Colors.Blue);
+                Canvas.SetLeft(circle, Mouse.GetPosition(this).X - 45);
+                Canvas.SetTop(circle, Mouse.GetPosition(this).Y - 45);
+                canvas.Children.Add(circle);
+
+                this.Cursor = Cursors.AppStarting;
+            }
+                    
+        }
+        
     }
 }
