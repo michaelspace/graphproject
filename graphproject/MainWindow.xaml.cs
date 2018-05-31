@@ -40,10 +40,18 @@ namespace graphproject
                 circle.Height = 30;
                 circle.Stroke = new SolidColorBrush(Colors.Black);
                 circle.StrokeThickness = 1;
+
+                Label label = new Label();
+                label.Content = NazwaWierzcholka.Text;
+
+
+                Canvas.SetLeft(label, Mouse.GetPosition(this).X - 45);
+                Canvas.SetTop(label, Mouse.GetPosition(this).Y - 45);
                 circle.Fill = new SolidColorBrush(Colors.Blue);
                 Canvas.SetLeft(circle, Mouse.GetPosition(this).X - 45);
                 Canvas.SetTop(circle, Mouse.GetPosition(this).Y - 45);
                 canvas.Children.Add(circle);
+                canvas.Children.Add(label);
 
                 this.Cursor = Cursors.AppStarting;
             }
