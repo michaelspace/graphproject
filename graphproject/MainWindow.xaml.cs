@@ -21,19 +21,30 @@ namespace graphproject
     /// </summary>
     public partial class MainWindow : Window
     {
+        public bool wierzcholek;
+        public bool krawedz;
+        public bool koniecKrawedzi;
+        public bool pierwszaKrawedz;
+        public double x1;
+        public double y1;
+
         public MainWindow()
         {
             InitializeComponent();
+            wierzcholek = false;
+            pierwszaKrawedz = true;
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            wierzcholek = true;
             this.Cursor = Cursors.Cross;
         }
 
         private void DodajWierzcholek(object sender, MouseButtonEventArgs e)
         {
-            if (this.Cursor == Cursors.Cross)
+            if (wierzcholek)
             {
                 Ellipse circle = new Ellipse();
                 circle.Width = 30;
@@ -54,9 +65,40 @@ namespace graphproject
                 canvas.Children.Add(label);
 
                 this.Cursor = Cursors.AppStarting;
+                wierzcholek = false;
+            }
+
+            if (krawedz)
+            {
+                Line line = new Line();
+                line.Stroke = Brushes.Red;
+                line.StrokeThickness = 4;
+
+                if (koniecKrawedzi)
+                {
+                    line.X2 = Mouse.GetPosition(this).X - x1 - 30;
+                    line.Y2 = Mouse.GetPosition(this).Y - y1 - 30;
+                    koniecKrawedzi = false;
+                    krawedz = false;
+                    Canvas.SetLeft(line, x1);
+                    Canvas.SetTop(line, y1);
+                    canvas.Children.Add(line);
+                    this.Cursor = Cursors.AppStarting;
+                }
+                else
+                {
+                    x1 = Mouse.GetPosition(this).X - 30;
+                    y1 = Mouse.GetPosition(this).Y - 30;
+                    koniecKrawedzi = true;
+                }
             }
                     
         }
-        
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            krawedz = true;
+            this.Cursor = Cursors.Cross;
+        }
     }
 }
