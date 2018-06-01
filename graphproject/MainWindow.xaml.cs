@@ -70,6 +70,10 @@ namespace graphproject
 
         static void Floyd_Warshall(int[,] graph_matrix)
         {
+            // "distance" array contains lenght of the shortest path between every pair of vertices
+            // "prev" array contains vertices (separated by dots) which are in particular path
+
+
             int n = graph_matrix.GetLength(0);
             n++; //algorithm works on matrix which size is n+1
 
@@ -96,13 +100,13 @@ namespace graphproject
                     if (matrix[i, j] != 0)
                     {
                         dist[i, j, 0] = matrix[i, j];
-                        prev[i, j] = Convert.ToString(i);
+                        prev[i, j] = Convert.ToString(i)+'.'; //vertices in path are separated by dots
                     }
 
                     else
                     {
                         dist[i, j, 0] = inf;
-                        prev[i, j] = Convert.ToString(i);
+                        prev[i, j] = Convert.ToString(i)+'.';
                     }
                 }
             }
@@ -117,7 +121,7 @@ namespace graphproject
                         {
                             dist[i, j, k] = dist[i, k, k - 1] + dist[k, j, k - 1];
                             if (i == j) prev[i, j] = "null";
-                            else prev[i, j] = prev[i, j] + Convert.ToString(k);
+                            else prev[i, j] = prev[i, j] + Convert.ToString(k)+'.';
                         }
                         else dist[i, j, k] = dist[i, j, k - 1];
                     }
