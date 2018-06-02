@@ -85,8 +85,16 @@ namespace graphproject
 
                 if (koniecKrawedzi)
                 {
-                    line.X2 = Mouse.GetPosition(this).X - x1 - 30;
-                    line.Y2 = Mouse.GetPosition(this).Y - y1 - 30;
+                    foreach (var item in wierzcholki)
+                    {
+                        var odl = Math.Sqrt((Mouse.GetPosition(this).X - 30 - item.wspolrzednaX - 15) * (Mouse.GetPosition(this).X - 30 - item.wspolrzednaX - 15) + (Mouse.GetPosition(this).Y - 30 - item.wspolrzednaY - 15) * (Mouse.GetPosition(this).Y - 30 - item.wspolrzednaY - 15));
+                        if (odl < 15 && item.wspolrzednaX != x1-15)
+                        {
+                            line.X2 = item.wspolrzednaX + 15 -x1;
+                            line.Y2 = item.wspolrzednaY + 15 -y1;
+                        }
+                    }
+
                     koniecKrawedzi = false;
                     krawedz = false;
                     Canvas.SetLeft(line, x1);
@@ -98,6 +106,16 @@ namespace graphproject
                 {
                     x1 = Mouse.GetPosition(this).X - 30;
                     y1 = Mouse.GetPosition(this).Y - 30;
+
+                    foreach (var item in wierzcholki)
+                    {
+                        var odl = Math.Sqrt((x1-item.wspolrzednaX - 15)*(x1-item.wspolrzednaX - 15) + (y1-item.wspolrzednaY - 15 )*(y1-item.wspolrzednaY - 15 ));
+                        if (odl<15)
+                        {
+                            x1 = item.wspolrzednaX + 15;
+                            y1 = item.wspolrzednaY + 15;
+                        }
+                    }
                     koniecKrawedzi = true;
                 }
             }
