@@ -29,7 +29,8 @@ namespace graphproject
         public double x1;
         public double y1;
         public List<Wierzcholek> wierzcholki = new List<Wierzcholek>();
-        public int id;
+        public int idWierzcholka;
+        public int idKrawedzi;
 
 
         public MainWindow()
@@ -37,7 +38,8 @@ namespace graphproject
             InitializeComponent();
             wierzcholek = false;
             pierwszaKrawedz = true;
-            id = 1;
+            idWierzcholka = 1;
+            idKrawedzi = 1;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -69,9 +71,9 @@ namespace graphproject
                 canvas.Children.Add(label);
 
 
-                Wierzcholek w = new Wierzcholek(id, NazwaWierzcholka.Text, Mouse.GetPosition(this).X - 45, Mouse.GetPosition(this).Y - 45);
+                Wierzcholek w = new Wierzcholek(idWierzcholka, NazwaWierzcholka.Text, Mouse.GetPosition(this).X - 45, Mouse.GetPosition(this).Y - 45);
                 wierzcholki.Add(w);
-                id++;
+                idWierzcholka++;
 
                 this.Cursor = Cursors.AppStarting;
                 wierzcholek = false;
@@ -92,6 +94,8 @@ namespace graphproject
                         {
                             line.X2 = item.wspolrzednaX + 15 -x1;
                             line.Y2 = item.wspolrzednaY + 15 -y1;
+                            item.lista.Add(new Krawedzie(idKrawedzi, Convert.ToInt32(Waga.Text)));
+                            idKrawedzi++;
                         }
                     }
 
@@ -114,6 +118,10 @@ namespace graphproject
                         {
                             x1 = item.wspolrzednaX + 15;
                             y1 = item.wspolrzednaY + 15;
+
+                            //TODO
+
+                            item.lista.Add(new Krawedzie(idKrawedzi, Convert.ToInt32(Waga.Text)));
                         }
                     }
                     koniecKrawedzi = true;

@@ -12,6 +12,7 @@ namespace graphproject.Model
         public string nazwa;
         public double wspolrzednaX;
         public double wspolrzednaY;
+        public List<Krawedzie> lista = new List<Krawedzie>();
 
         public Wierzcholek(int id, string nazwa, double wspolrzednaX, double wspolrzednaY)
         {
@@ -20,5 +21,6 @@ namespace graphproject.Model
             this.wspolrzednaX = wspolrzednaX;
             this.wspolrzednaY = wspolrzednaY;
         }
+
     }
 }
