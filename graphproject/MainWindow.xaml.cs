@@ -28,7 +28,7 @@ namespace graphproject
         public bool pierwszaKrawedz;
         public double x1;
         public double y1;
-        public List<Wierzcholek> wierzcholki;
+        public List<Wierzcholek> wierzcholki = new List<Wierzcholek>();
         public int id;
 
 
@@ -71,6 +71,8 @@ namespace graphproject
 
                 Wierzcholek w = new Wierzcholek(id, NazwaWierzcholka.Text, Mouse.GetPosition(this).X - 45, Mouse.GetPosition(this).Y - 45);
                 wierzcholki.Add(w);
+                id++;
+
                 this.Cursor = Cursors.AppStarting;
                 wierzcholek = false;
             }
