@@ -8,104 +8,99 @@ namespace graphproject
 {
     class Algorytm
     {
-        int[,] graph_matrix = { { 0, 1, 2, 5, 3},
-                                    {1, 0, 0, 1, 0},
-                                    {2, 0, 0, 3, 0},
-                                    {5, 1, 3, 0, 0},
-                                    {3, 0, 0, 0, 0} };
+        int[,] graph_matrix = { { 0, 2, 1, 0, 0, 0},
+                                    {2, 0, 0, 2, 0, 11},
+                                    {1, 0, 0, 2, 0, 0},
+                                    {0, 2, 2, 0, 3, 0},
+                                    {0, 0, 0, 3, 0, 0},
+                                    {0, 11, 0, 0, 0, 0} };
 
         const int inf = int.MaxValue / 2 - 1; //infinity div 2
 
-        static void Floyd_Warshall(int[,] graph_matrix)
+        static void FloydWarshall(int[,] graph_matrix)
         {
-            // "distance" array contains lenght of the shortest path between every pair of vertices
-            // "prev" array contains vertices (separated by dots) which are in particular path
-
-
             int n = graph_matrix.GetLength(0);
-            n++; //algorithm works on matrix which size is n+1
 
-            int[,] matrix = new int[n, n];
+            //shortest distance between every pair of vertices
+            int[,] dist = new int[n, n];
 
-            for (int i = 0; i < n; i++) matrix[i, 0] = 0;
-            for (int j = 0; j < n; j++) matrix[0, j] = 0;
+            //"next" array remembers course of the path between vertices and finally we'll reconstruct path
+            int[,] next = new int[n, n];
 
-            for (int i = 1; i < n; i++) //extending matrix to n+1 size
-            {
-                for (int j = 1; j < n; j++)
-                {
-                    matrix[i, j] = graph_matrix[i - 1, j - 1];
-                }
-            }
-
-            int[,,] dist = new int[n, n, n]; //shortest distance between every pair of vertices
-            string[,] prev = new string[n, n]; //course of the shortest path between vertices
-
-            for (int i = 1; i < n; i++) //initial part of the algorithm
-            {
-                for (int j = 1; j < n; j++)
-                {
-                    if (matrix[i, j] != 0)
-                    {
-                        dist[i, j, 0] = matrix[i, j];
-                        prev[i, j] = Convert.ToString(i) + '.'; //vertices in path are separated by dots
-                    }
-
-                    else
-                    {
-                        dist[i, j, 0] = inf;
-                        prev[i, j] = Convert.ToString(i) + '.';
-                    }
-                }
-            }
-
-            for (int k = 1; k < n; k++) //main part of the algorithm
-            {
-                for (int i = 1; i < n; i++)
-                {
-                    for (int j = 1; j < n; j++)
-                    {
-                        if (dist[i, k, k - 1] + dist[k, j, k - 1] < dist[i, j, k - 1])
-                        {
-                            dist[i, j, k] = dist[i, k, k - 1] + dist[k, j, k - 1];
-                            if (i == j) prev[i, j] = "null";
-                            else prev[i, j] = prev[i, j] + Convert.ToString(k) + '.';
-                        }
-                        else dist[i, j, k] = dist[i, j, k - 1];
-                    }
-                }
-            }
-
-            int[,] distance = new int[n, n];
-
-            for (int i = 0; i < n; i++) //converting 3-dimension "dist" matrix to 2-dimension "distance" matrix with constant k = size of matrix
+            for (int i = 0; i < n; i++) //initial part of the algorithm
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if (i == j) distance[i, j] = 0;
-                    else distance[i, j] = dist[i, j, n - 1]; //n-1
+                    if (graph_matrix[i, j] != 0) dist[i, j] = graph_matrix[i, j];
+                    else dist[i, j] = inf; //inf value when there isn't edge between "i" and "j" vertices
+
+                    next[i, j] = j;
                 }
             }
 
-            for (int i = 1; i < n; i++) //adding last vertice to path
+            for (int k = 0; k < n; k++) //main part of the algorithm
             {
-                for (int j = 1; j < n; j++)
+                for (int i = 0; i < n; i++)
                 {
-                    if (prev[i, j] != "null") prev[i, j] = prev[i, j] + Convert.ToString(j);
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (dist[i, j] > dist[i, k] + dist[k, j])
+                        {
+                            dist[i, j] = dist[i, k] + dist[k, j];
+                            next[i, j] = next[i, k];
+
+                            if (i == j) dist[i, j] = 0;
+                        }
+                    }
                 }
             }
 
-            Console.WriteLine("-----DISTANCE-----");
-            Display<int>(distance);
-            Console.WriteLine("-----PATH-----");
-            Display<string>(prev);
+            string[,] paths = new string[n, n]; //matrix with paths reconstructed
+
+            for (int i = 0; i < n; i++) //reconstructing paths for every pair of the vertices
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i == j) paths[i, j] = "null"; //path from A to A vertice is empty
+                    else paths[i, j] = Path(next, i, j);
+                }
+            }
+
+            Console.WriteLine("----------DISTANCE----------");
+            Display<int>(dist);
+            Console.WriteLine("------------PATH------------");
+            Display<string>(paths);
+        }
+
+        static string Path(int[,] next, int u, int v)
+        {
+            string path = Convert.ToString(u); //first vertice in the path
+
+            while (u != v)
+            {
+                u = next[u, v];
+                path = path + "." + Convert.ToString(u); //reconstruction
+            }
+
+            string[] path2 = path.Split('.');
+            string path3 = "";
+
+            //add 1 to every vertice because in C# we count array index starting from 0
+            for (int i = 0; i < path2.Length; i++)
+            {
+                int ver = Convert.ToInt32(path2[i]);
+                ver++; //adding 1 to vertice
+                path3 = path3 + Convert.ToString(ver) + ".";
+            }
+            path3 = path3.Remove(path3.Length - 1, 1);
+            return path3;
         }
 
         static void Display<T>(T[,] matrix)
         {
-            for (int i = 1; i < matrix.GetLength(0); i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 1; j < matrix.GetLength(0); j++)
+                for (int j = 0; j < matrix.GetLength(0); j++)
                 {
                     Console.Write(matrix[i, j] + ", ");
                 }
