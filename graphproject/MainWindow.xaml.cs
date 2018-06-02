@@ -119,7 +119,7 @@ namespace graphproject
                             x1 = item.wspolrzednaX + 15;
                             y1 = item.wspolrzednaY + 15;
 
-                            //TODO
+
 
                             item.lista.Add(new Krawedzie(idKrawedzi, Convert.ToInt32(Waga.Text)));
                         }
@@ -135,6 +135,44 @@ namespace graphproject
         {
             krawedz = true;
             this.Cursor = Cursors.Cross;
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            double[,] macierz = new double[wierzcholki.Count, wierzcholki.Count];
+
+            for (int i = 1; i < wierzcholki.Count +1; i++)
+            {
+                for (int j = 1; j < wierzcholki.Count +1; j++)
+                {
+                    if (i==j)
+                    {
+                        macierz[i-1, i-1] = 0;
+                    }
+
+                    else
+                    {
+                        foreach (var item in wierzcholki[j-1].lista)
+                        {
+                            for (int k = 1; k < wierzcholki.Count +1; k++)
+                            {
+                                if (k!=j)
+                                {
+                                    foreach (var item2 in wierzcholki[k-1].lista)
+                                    {
+                                        if (item2.id == item.id)
+                                        {
+                                            macierz[j-1, k-1] = item2.waga;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
         }
     }
 }

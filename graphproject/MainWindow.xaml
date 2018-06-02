@@ -12,7 +12,8 @@
         <TextBox x:Name="NazwaWierzcholka" HorizontalAlignment="Left" Height="26" Margin="43,313,0,0" TextWrapping="Wrap" Text="Nazwa Wierzchołka" VerticalAlignment="Top" Width="116" />
         <Button Content="Dodaj Krawędź" HorizontalAlignment="Left" Margin="184,344,0,0" VerticalAlignment="Top" Width="116" Height="39" Click="Button_Click_1"/>
         <TextBox x:Name="Waga" HorizontalAlignment="Left" Height="26" Margin="184,313,0,0" TextWrapping="Wrap" Text="Waga " VerticalAlignment="Top" Width="116"/>
-        <TextBlock HorizontalAlignment="Left" Height="3" Margin="255,323,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="7"/>
+        <Button Content="Wyznacz macierz" HorizontalAlignment="Left" Margin="596,313,0,0" VerticalAlignment="Top" Width="127" Height="70" Click="Button_Click_3"/>
+
 
     </Grid>
 </Window>
