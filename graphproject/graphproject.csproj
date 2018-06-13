@@ -69,8 +69,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Krawedzie.cs" />
-    <Compile Include="Model\Wierzcholki.cs" />
+    <Compile Include="Model\Edge.cs" />
+    <Compile Include="Model\Graph.cs" />
+    <Compile Include="Model\ObservableObject.cs" />
+    <Compile Include="Model\Vertex.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
