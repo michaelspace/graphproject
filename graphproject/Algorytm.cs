@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace graphproject
 {
-    class Algorytm
+    public class Algorytm
     {
+        public int[,] MacierzWag { get; set; }
+        public string[,] MacierzNazw { get; set; }
+        public Algorytm()
+        {
+        }
         int[,] graph_matrix = { { 0, 2, 1, 0, 0, 0},
                                     {2, 0, 0, 2, 0, 11},
                                     {1, 0, 0, 2, 0, 0},
@@ -17,7 +22,7 @@ namespace graphproject
 
         const int inf = int.MaxValue / 2 - 1; //infinity div 2
 
-        static void FloydWarshall(int[,] graph_matrix)
+        public void FloydWarshall(int[,] graph_matrix)
         {
             int n = graph_matrix.GetLength(0);
 
@@ -70,9 +75,11 @@ namespace graphproject
             Display<int>(dist);
             Console.WriteLine("------------PATH------------");
             Display<string>(paths);
+            MacierzWag = dist;
+            MacierzNazw = paths;
         }
 
-        static string Path(int[,] next, int u, int v)
+        private string Path(int[,] next, int u, int v)
         {
             string path = Convert.ToString(u); //first vertice in the path
 
@@ -96,7 +103,7 @@ namespace graphproject
             return path3;
         }
 
-        static void Display<T>(T[,] matrix)
+        private void Display<T>(T[,] matrix)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
             {

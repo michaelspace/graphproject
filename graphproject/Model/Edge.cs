@@ -15,7 +15,7 @@ namespace graphproject.Model
         public int waga;
 
         public Line linia  { get; set; }
-
+        public Label label { get; set; }
         public Vertex V1 { get; set; }
         public Vertex V2 { get; set; }
 
@@ -44,8 +44,18 @@ namespace graphproject.Model
                 X2 = V2.wspolrzednaX+15,
                 Y2 = V2.wspolrzednaY+15
             };
-            
+
+            label = new Label()
+            {
+                Content = waga,
+                FontSize = 12
+            };
+
+            SetLeft(label, (linia.X1 + linia.X2) / 2);
+            SetTop(label, (linia.Y1 + linia.Y2) / 2);
+
             Children.Add(linia);
+            Children.Add(label);
         }
     }
 }
