@@ -117,7 +117,7 @@ namespace graphproject
                 if(!graf.wierzcholki.Contains(w))
                     graf.wierzcholki.Add(w);
                 
-                this.Cursor = Cursors.AppStarting;
+                this.Cursor = Cursors.Arrow;
                 wierzcholek = false;
 
                 
@@ -131,7 +131,15 @@ namespace graphproject
 
                     referenceToVertex.circle.Stroke = new SolidColorBrush(Colors.Red);
 
-                    this.Cursor = Cursors.Hand;
+                    if (krawedz)
+                    {
+                        this.Cursor = Cursors.Cross;
+                    }
+                    else
+                    {
+                        this.Cursor = Cursors.Hand;
+                    }
+                    
                     DrawableCanvas.MouseMove += DrawableCanvasOnMouseMove;
 
                     if (krawedz  && anotherVertex != referenceToVertex)
@@ -147,7 +155,7 @@ namespace graphproject
                             if (!graf.krawedzie.Contains(krawedz))
                                 graf.krawedzie.Add(krawedz);
 
-                            this.Cursor = Cursors.AppStarting;
+                            
                             
                         }
                         
@@ -160,10 +168,14 @@ namespace graphproject
                 w.MouseLeftButtonUp += delegate (object o, MouseButtonEventArgs args)
                 {
                     DrawableCanvas.MouseMove -= DrawableCanvasOnMouseMove;
-                    this.Cursor = Cursors.AppStarting;
-                    if(referenceToVertex!=null && !krawedz)
+                    
+                    if (referenceToVertex != null && !krawedz)
+                    {
+
                         referenceToVertex.circle.Stroke = new SolidColorBrush(Colors.BurlyWood);
-                        
+                        this.Cursor = Cursors.Arrow;
+                    }
+
                     referenceToVertex = null;
                 };
             }

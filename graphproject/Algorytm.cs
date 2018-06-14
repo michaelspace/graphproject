@@ -71,10 +71,10 @@ namespace graphproject
                 }
             }
 
-            Console.WriteLine("----------DISTANCE----------");
-            Display<int>(dist);
-            Console.WriteLine("------------PATH------------");
-            Display<string>(paths);
+            //Console.WriteLine("----------DISTANCE----------");
+            //Display<int>(dist);
+            //Console.WriteLine("------------PATH------------");
+            //Display<string>(paths);
             MacierzWag = dist;
             MacierzNazw = paths;
         }
