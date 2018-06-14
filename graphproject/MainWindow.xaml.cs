@@ -82,16 +82,25 @@ namespace graphproject
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            wierzcholek = true;
-            referenceToVertex = null;
-            anotherVertex = null;
-            if (NazwaWierzcholka.Text == tempCity)
+            if (idWierzcholka >13)
             {
-                tempCity = losoweMiasta.Miasta;
-                NazwaWierzcholka.Text = tempCity;
-
+                MessageBox.Show("Osiągnięto limit wierzchołków!", "Uwaga", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
-            this.Cursor = Cursors.Cross;
+            else
+            {
+                wierzcholek = true;
+                referenceToVertex = null;
+                anotherVertex = null;
+                if (NazwaWierzcholka.Text == tempCity)
+                {
+                    tempCity = losoweMiasta.Miasta;
+                    NazwaWierzcholka.Text = tempCity;
+
+                }
+
+                this.Cursor = Cursors.Cross;
+            }
         }
 
         private void DodajWierzcholek(object sender, MouseButtonEventArgs e)
@@ -265,6 +274,9 @@ namespace graphproject
             Algorytm FloydWarshall = new Algorytm();
             FloydWarshall.FloydWarshall(macierzWagInts);
 
+            Matrix outputMatrix = new Matrix(FloydWarshall.MacierzWag, FloydWarshall.MacierzNazw, macierzNazwStrings);
+            outputMatrix.ShowDialog();
+
         }
 
         private void ResetBtn_Click(object sender, RoutedEventArgs e)
@@ -286,6 +298,12 @@ namespace graphproject
             losoweMiasta = new City();
             tempCity = "Podaj Miasto";
             NazwaWierzcholka.Text = tempCity;
+        }
+
+        private void onAutorzy_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("System najkrótszych połączeń kolejowych między wybranymi miejscowościami w oparciu o algorytm Floyda-Warshalla. Autorzy projektu: \n\n- Michał Kocisz\n\n- Kamil Paździorek\n\n- Grzegorz Jarząbek\n\n\u00a9 2018 SGGW - Grafy i Sieci", "Autorzy",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

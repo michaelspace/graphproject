@@ -31,7 +31,7 @@ namespace graphproject.Model
             miasta.Add("Gdańsk");
             miasta.Add("Gdynia");
             miasta.Add("Szczecin");
-            miasta.Add("Olszty");
+            miasta.Add("Olsztyn");
             miasta.Add("Łódź");
             miasta.Add("Kraków");
             miasta.Add("Poznań");
