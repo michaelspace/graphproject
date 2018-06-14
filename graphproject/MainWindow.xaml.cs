@@ -295,6 +295,7 @@ namespace graphproject
         {
             referenceToVertex = null;
             anotherVertex = null;
+            idWierzcholka = 0;
             foreach (var item in graf.wierzcholki)
             {
                 DrawableCanvas.Children.Remove(item);
