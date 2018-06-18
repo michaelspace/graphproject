@@ -179,7 +179,7 @@ namespace graphproject
                         {
                             var label = new Label()
                             {
-                                Content = macierzNazwMiast[i - 1, j - 1] + ": " + macierzWagInts[i - 1, j - 1],
+                                Content =  macierzWagInts[i - 1, j - 1],/* = macierzNazwMiast[i - 1, j - 1] + ": " +macierzWagInts[i - 1, j - 1]*/
                                 HorizontalAlignment = HorizontalAlignment.Center,
                                 VerticalAlignment = VerticalAlignment.Center
                                 
@@ -187,7 +187,7 @@ namespace graphproject
                             };
                             label.MouseEnter += delegate(object sender, MouseEventArgs args) {
                                 var tmp = sender as Label;
-                                tmp.Background = Brushes.AntiqueWhite;
+                                tmp.Background = Brushes.Chocolate;
                             };
                             label.MouseLeave += delegate(object sender, MouseEventArgs args) {
                                 var tmp = sender as Label;

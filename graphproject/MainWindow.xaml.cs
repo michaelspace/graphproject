@@ -85,7 +85,7 @@ namespace graphproject
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (IdWierzcholka >9)
+            if (IdWierzcholka >13)
             {
                 MessageBox.Show("Osiągnięto limit wierzchołków!", "Uwaga", MessageBoxButton.OK,
                     MessageBoxImage.Warning);
@@ -356,7 +356,7 @@ namespace graphproject
         /// <param name="e"></param>
         private void onAutorzy_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("System najkrótszych połączeń kolejowych między wybranymi miejscowościami w oparciu o algorytm Floyda-Warshalla. Autorzy projektu: \n\n- Michał Kocisz\n\n- Kamil Paździorek\n\n- Grzegorz Jarząbek\n\n\u00a9 2018 SGGW - Grafy i Sieci", "Autorzy",
+            MessageBox.Show("System najkrótszych połączeń kolejowych między wybranymi miejscowościami w oparciu o algorytm Floyda-Warshalla. Autorzy projektu: \n\n- Michał Kocisz\n\n- Kamil Paździorek\n\n- Grzegorz Jarząbek\n\n\u00a9 2018 Grafy i Sieci", "Autorzy",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
