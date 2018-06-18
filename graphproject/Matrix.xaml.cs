@@ -7,10 +7,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using graphproject.Model;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Label = System.Windows.Controls.Label;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace graphproject
 {
@@ -19,15 +24,18 @@ namespace graphproject
     /// </summary>
     public partial class Matrix : Window
     {
+        private Canvas dCanvas;
+        private List<Edge> krawedzie;
         private int[,] macierzWagInts;
         private string[,] macierzNazwMiast;
         private string[] macierzNazwStrings;
         private int rozmiar;
 
-        public Matrix(int[,] wagi, string[,] macierzNazw, string[] nazwy)
+        public Matrix(int[,] wagi, string[,] macierzNazw, string[] nazwy, List<Edge> kr, Canvas d)
         {
             InitializeComponent();
-
+            krawedzie = kr;
+            dCanvas = d;
             macierzWagInts = wagi;
             macierzNazwMiast = macierzNazw;
             macierzNazwStrings = nazwy;
@@ -82,43 +90,77 @@ namespace graphproject
 
                 }
 
-                //for (int i = 1; i <=rozmiar; i++)
+
+                //for (int i = 0; i < rozmiar; i++)
                 //{
-                //    var label = new Label()
+                //    for (int j = 0; j < rozmiar; j++)
                 //    {
-                //        Content = macierzWagInts[i-1,i-1],
-                //        HorizontalAlignment = HorizontalAlignment.Center,
-                //        VerticalAlignment = VerticalAlignment.Center
+                //        if (i==j)
+                //        {
+                //            macierzNazwMiast[i, j] = "-";
+                //        }
+                //        else if (macierzWagInts[i, j] >= 1073741822)
+                //        {
+                //            macierzNazwMiast[i, j] = "-";
+                //        }
+                //        else
+                //        {
+                //            string[] tmp = macierzNazwMiast[i, j].Split('.');
+                //            string prev_id = tmp[tmp.Length - 2];
 
-                //    };
-                //    myOutputGrid.Children.Add(label);
-                //    Grid.SetRow(label, i);
-                //    Grid.SetColumn(label, i);
+                //            try
+                //            {
+                //                int id;
+                //                bool correct_id = int.TryParse(prev_id, out id);
+                //                macierzNazwMiast[i, j] = macierzNazwStrings[id-1];
+                //            }
+                //            catch (Exception e)
+                //            {
+                //                Console.WriteLine(e);
+                //                throw;
+                //            }
+                //        }
+                //    }
                 //}
-
 
                 for (int i = 0; i < rozmiar; i++)
                 {
                     for (int j = 0; j < rozmiar; j++)
                     {
-                        if (i==j)
+                        if (i == j)
                         {
-                            macierzNazwMiast[i, j] = "0";
+                            macierzNazwMiast[i, j] = "-";
                         }
                         else if (macierzWagInts[i, j] >= 1073741822)
                         {
-                            macierzNazwMiast[i, j] = "0";
+                            macierzNazwMiast[i, j] = "-";
                         }
                         else
                         {
                             string[] tmp = macierzNazwMiast[i, j].Split('.');
-                            string prev_id = tmp[tmp.Length - 2];
+                            int[] index = new int[tmp.Length];
 
                             try
                             {
-                                int id;
-                                bool correct_id = int.TryParse(prev_id, out id);
-                                macierzNazwMiast[i, j] = macierzNazwStrings[id-1];
+                                for (int k = 0; k < tmp.Length; k++)
+                                {
+                                    bool correct_id = int.TryParse(tmp[k], out index[k]);
+                                }
+                                macierzNazwMiast[i, j] = String.Empty;
+                                for (int k = 0; k < index.Length; k++)
+                                {
+                                    if (k != index.Length - 1)
+                                    {
+                                        macierzNazwMiast[i, j] = String.Concat(macierzNazwMiast[i, j],
+                                            macierzNazwStrings[index[k] - 1], "-");
+                                    }
+                                    else
+                                    {
+                                        macierzNazwMiast[i, j] = String.Concat(macierzNazwMiast[i, j],
+                                            macierzNazwStrings[index[k] - 1]);
+                                    }
+                                }
+                                
                             }
                             catch (Exception e)
                             {
@@ -137,10 +179,69 @@ namespace graphproject
                         {
                             var label = new Label()
                             {
-                                Content = macierzNazwMiast[i - 1, j - 1] + "/" + macierzWagInts[i - 1, j - 1],
+                                Content = macierzNazwMiast[i - 1, j - 1] + ": " + macierzWagInts[i - 1, j - 1],
                                 HorizontalAlignment = HorizontalAlignment.Center,
                                 VerticalAlignment = VerticalAlignment.Center
+                                
 
+                            };
+                            label.MouseEnter += delegate(object sender, MouseEventArgs args) {
+                                var tmp = sender as Label;
+                                tmp.Background = Brushes.AntiqueWhite;
+                            };
+                            label.MouseLeave += delegate(object sender, MouseEventArgs args) {
+                                var tmp = sender as Label;
+                                tmp.Background = Brushes.Transparent;
+                            };
+                            label.MouseLeftButtonDown += delegate(object s, MouseButtonEventArgs a)
+                            {
+                                var tmp = s as Label;
+                                tmp.Background = Brushes.Gold;
+                            };
+                            label.MouseLeftButtonUp += delegate(object sender, MouseButtonEventArgs args)
+                            {
+                                int row, column;
+                                var lbl = sender as Label;
+                                lbl.Background = Brushes.Transparent;
+                                if (lbl != null)
+                                {
+                                    row = Grid.GetRow(lbl);
+                                    column = Grid.GetColumn(lbl);
+                                    string[] tmp = macierzNazwMiast[row-1, column-1].Split('-');
+                                    if (tmp.Length > 1)
+                                    {
+                                        foreach (var krw in krawedzie)
+                                        {
+                                            dCanvas.Children.Remove(krw);
+                                            krw.linia.Stroke = Brushes.Blue;
+                                            dCanvas.Children.Add(krw);
+                                        }
+
+                                        for (int k = 0; k < tmp.Length; k++)
+                                        {
+                                            for (int l = 0 ; l < tmp.Length; l++)
+                                            {
+                                                if (k != l)
+                                                {
+                                                    foreach (var krw in krawedzie)
+                                                    {
+                                                        if ((krw.V1.nazwa == tmp[k] || krw.V2.nazwa == tmp[k]) &&
+                                                            (krw.V1.nazwa == tmp[l] || krw.V2.nazwa == tmp[l]))
+                                                        {
+                                                            dCanvas.Children.Remove(krw);
+                                                            krw.linia.Stroke = Brushes.Red;
+                                                            dCanvas.Children.Add(krw);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    
+                                }
                             };
                             myOutputGrid.Children.Add(label);
                             Grid.SetRow(label, i);
@@ -150,7 +251,7 @@ namespace graphproject
                         {
                             var label = new Label()
                             {
-                                Content = "0",
+                                Content = "-",
                                 HorizontalAlignment = HorizontalAlignment.Center,
                                 VerticalAlignment = VerticalAlignment.Center
 
@@ -171,15 +272,3 @@ namespace graphproject
         
     }
 }
-/*
-<Grid.ColumnDefinitions>
-<ColumnDefinition Width = "*" />
-< ColumnDefinition Width="*"/>
-</Grid.ColumnDefinitions>
-<Grid.RowDefinitions>
-<RowDefinition Height = "*" />
-< RowDefinition Height="*"/>
-</Grid.RowDefinitions>
-        
-<Label Content = "Test" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-*/

@@ -35,7 +35,7 @@ namespace graphproject.Model
 
             linia = new Line()
             {
-                Stroke = Brushes.Red,
+                Stroke = Brushes.Blue,
                 StrokeThickness = 2,
 
                 X1 = V1.wspolrzednaX+15,

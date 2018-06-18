@@ -7,14 +7,16 @@
         mc:Ignorable="d"
         Title="Floyd-Warshall" Height="450" Width="800"  ResizeMode="NoResize">
     <Grid Name="myGrid">
-        <Canvas x:Name="DrawableCanvas" MouseLeftButtonDown="DodajWierzcholek" HorizontalAlignment="Left" Height="255" Margin="30,30,0,0" VerticalAlignment="Top" Width="733" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Border ClipToBounds="true" Grid.Row="1" Grid.Column="1" >
+            <Canvas x:Name="DrawableCanvas" MouseLeftButtonDown="DodajElementWierzcholekKrawedz" HorizontalAlignment="Left" Height="255" Margin="30,30,0,0" VerticalAlignment="Top" Width="733" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        </Border>
         <Button Content="Dodaj &#xD;&#xA;Wierzchołek" HorizontalAlignment="Left" Margin="43,344,0,0" VerticalAlignment="Top" Width="116" Height="39" Click="Button_Click"/>
         <Button Content="Resetuj" HorizontalAlignment="Left" Margin="340,344,0,0" VerticalAlignment="Top" Width="116" Height="39" Click="ResetBtn_Click"/>
         <Button Content="Autorzy" HorizontalAlignment="Left" Margin="495,344,0,0" VerticalAlignment="Top" Width="60" Height="39" Click="onAutorzy_Click"/>
         <TextBox x:Name="NazwaWierzcholka" HorizontalAlignment="Left" Height="26" Margin="43,313,0,0" TextWrapping="Wrap" Text="Podaj Miasto" VerticalAlignment="Top" Width="116" />
-        <Button Content="Dodaj Krawędź" HorizontalAlignment="Left" Margin="184,344,0,0" VerticalAlignment="Top" Width="116" Height="39" Click="Button_Click_1"/>
+        <Button Content="Dodaj Krawędź" HorizontalAlignment="Left" Margin="184,344,0,0" VerticalAlignment="Top" Width="116" Height="39" Click="DodajKrawedz"/>
         <TextBox x:Name="Waga" HorizontalAlignment="Left" Height="26" Margin="184,313,0,0" TextWrapping="Wrap" PreviewTextInput="NumberValidationTextBox" Text="1" VerticalAlignment="Top" Width="116"/>
-        <Button Content="Wyznacz macierz" HorizontalAlignment="Left" Margin="596,313,0,0" VerticalAlignment="Top" Width="127" Height="70" Click="Button_Click_3"/>
+        <Button Content="Wyznacz macierz" HorizontalAlignment="Left" Margin="596,313,0,0" VerticalAlignment="Top" Width="127" Height="70" Click="WyznaczMacierz"/>
 
 
     </Grid>

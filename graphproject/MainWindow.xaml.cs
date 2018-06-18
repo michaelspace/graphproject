@@ -25,43 +25,41 @@ namespace graphproject
     {
         private Graph graf;
 
-        public bool wierzcholek;
-        public bool krawedz;
-        public bool koniecKrawedzi;
-        public bool pierwszaKrawedz;
-        public double x1;
-        public double y1;
-      //  public List<Vertex> wierzcholki = new List<Vertex>();
-     //   public List<Edge> krawedzie = new List<Edge>();
-        public int idWierzcholka;
-        public int idKrawedzi;
-        private Vertex referenceToVertex;
-        private Vertex anotherVertex;
+        public bool Wierzcholek { get; set; }
+        public bool Krawedz { get; set; }
 
-        private City losoweMiasta;
-        private string tempCity;
+        public int IdWierzcholka { get; set; }
+        public int IdKrawedzi { get; set; }
+        private Vertex ReferenceToVertex { get; set; }
+        private Vertex AnotherVertex { get; set; }
+
+        private City losoweMiasta { get; set; }
+        private string tempCity { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
             graf = new Graph();
 
-            wierzcholek = false;
-            pierwszaKrawedz = true;
-            idWierzcholka = 0;
-            idKrawedzi = 1;
-            referenceToVertex = null;
-            anotherVertex = null;
+            Wierzcholek = false;
+            IdWierzcholka = 0;
+            IdKrawedzi = 0;
+            ReferenceToVertex = null;
+            AnotherVertex = null;
 
             losoweMiasta = new City();
             tempCity = "Podaj Miasto";
         }
-
+        /// <summary>
+        /// Zapobiega wprowadzeniu nieprawidlowych wag
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             sbyte value;
             bool isNum = sbyte.TryParse(e.Text, out value);
-            Console.WriteLine(isNum);
+
             var text = sender as TextBox;
             try
             {
@@ -80,36 +78,51 @@ namespace graphproject
             e.Handled = !isNum;
         }
 
+        /// <summary>
+        /// Umozliwia dodanie wierzcholka, gdy limit nie zostal osiagniety
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (idWierzcholka >13)
+            if (IdWierzcholka >9)
             {
                 MessageBox.Show("Osiągnięto limit wierzchołków!", "Uwaga", MessageBoxButton.OK,
                     MessageBoxImage.Warning);
             }
             else
             {
-                wierzcholek = true;
-                referenceToVertex = null;
-                anotherVertex = null;
-                if (NazwaWierzcholka.Text == tempCity)
+                Wierzcholek = true;
+                ReferenceToVertex = null;
+                AnotherVertex = null;
+                if (NazwaWierzcholka.Text == tempCity || losoweMiasta.MiastaList.Contains(NazwaWierzcholka.Text))
                 {
                     tempCity = losoweMiasta.Miasta;
                     NazwaWierzcholka.Text = tempCity;
 
                 }
-
+                else
+                {
+                    tempCity = NazwaWierzcholka.Text;
+                    if (!losoweMiasta.MiastaList.Contains(tempCity))
+                    {
+                        losoweMiasta.MiastaList.Add(tempCity);
+                    }
+                }
                 this.Cursor = Cursors.Cross;
             }
         }
-
-        private void DodajWierzcholek(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Umozliwia dodanie krawedzi lub wierzcholka
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DodajElementWierzcholekKrawedz(object sender, MouseButtonEventArgs e)
         {
-          //  var canvas = canvas;
-            if (wierzcholek)
+            if (Wierzcholek)
             {
 
-                Vertex w = new Vertex(idWierzcholka++, NazwaWierzcholka.Text, Mouse.GetPosition(this).X - 45, Mouse.GetPosition(this).Y - 45);
+                Vertex w = new Vertex(IdWierzcholka++, NazwaWierzcholka.Text, Mouse.GetPosition(this).X - 45, Mouse.GetPosition(this).Y - 45);
 
                 Canvas.SetLeft(w, Mouse.GetPosition(this).X - 45);
                 Canvas.SetTop(w, Mouse.GetPosition(this).Y - 45);
@@ -118,20 +131,22 @@ namespace graphproject
                     graf.wierzcholki.Add(w);
                 
                 this.Cursor = Cursors.Arrow;
-                wierzcholek = false;
+                Wierzcholek = false;
 
                 
 
                 w.MouseLeftButtonDown += delegate(object o, MouseButtonEventArgs args)
                 {
-                    referenceToVertex = o as Vertex;
+                    myGrid.PreviewMouseUp += onMouseBtnUP;
 
-                    if (anotherVertex == null)
-                        anotherVertex = referenceToVertex;
+                    ReferenceToVertex = o as Vertex;
 
-                    referenceToVertex.circle.Stroke = new SolidColorBrush(Colors.Red);
+                    if (AnotherVertex == null)
+                        AnotherVertex = ReferenceToVertex;
 
-                    if (krawedz)
+                    ReferenceToVertex.circle.Stroke = new SolidColorBrush(Colors.Red);
+
+                    if (Krawedz)
                     {
                         this.Cursor = Cursors.Cross;
                     }
@@ -142,12 +157,12 @@ namespace graphproject
                     
                     DrawableCanvas.MouseMove += DrawableCanvasOnMouseMove;
 
-                    if (krawedz  && anotherVertex != referenceToVertex)
+                    if (Krawedz  && AnotherVertex != ReferenceToVertex)
                     {
 
-                        if (!anotherVertex.sasiedzi.Contains(referenceToVertex))
+                        if (!AnotherVertex.sasiedzi.Contains(ReferenceToVertex))
                         {
-                            var krawedz = new Edge(idKrawedzi++, Convert.ToInt32(Waga.Text), anotherVertex, referenceToVertex);
+                            var krawedz = new Edge(IdKrawedzi++, Convert.ToInt32(Waga.Text), AnotherVertex, ReferenceToVertex);
 
                             Canvas.SetZIndex(krawedz, -1);
                             DrawableCanvas.Children.Add(krawedz);
@@ -159,76 +174,89 @@ namespace graphproject
                             
                         }
                         
-                        krawedz = false;
-                        anotherVertex.circle.Stroke = new SolidColorBrush(Colors.BurlyWood);
-                        anotherVertex = null;
+                        Krawedz = false;
+                        AnotherVertex.circle.Stroke = new SolidColorBrush(Colors.BurlyWood);
+                        AnotherVertex = null;
                     }
-                };
-
-                w.MouseLeftButtonUp += delegate (object o, MouseButtonEventArgs args)
-                {
-                    DrawableCanvas.MouseMove -= DrawableCanvasOnMouseMove;
-                    
-                    if (referenceToVertex != null && !krawedz)
-                    {
-
-                        referenceToVertex.circle.Stroke = new SolidColorBrush(Colors.BurlyWood);
-                        this.Cursor = Cursors.Arrow;
-                    }
-
-                    referenceToVertex = null;
                 };
             }
 
             
                     
         }
+        /// <summary>
+        /// Pomocniczy event
+        /// </summary>
+        /// <param name="oo"></param>
+        /// <param name="argss"></param>
+        private void onMouseBtnUP(object oo, MouseButtonEventArgs argss)
+        {
+            DrawableCanvas.MouseMove -= DrawableCanvasOnMouseMove;
+            if (ReferenceToVertex != null && !Krawedz)
+            {
 
+                ReferenceToVertex.circle.Stroke = new SolidColorBrush(Colors.BurlyWood);
+                this.Cursor = Cursors.Arrow;
+            }
+
+            ReferenceToVertex = null;
+            myGrid.PreviewMouseUp -= onMouseBtnUP;
+        }
+
+        /// <summary>
+        /// Event do zmiany pozycji wierzcholka
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="mouseEventArgs"></param>
         private void DrawableCanvasOnMouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
-            
-                Canvas.SetLeft(referenceToVertex, mouseEventArgs.GetPosition(this).X - 45);
-                referenceToVertex.wspolrzednaX = mouseEventArgs.GetPosition(this).X - 45;
-                Canvas.SetTop(referenceToVertex, mouseEventArgs.GetPosition(this).Y - 45);
-                referenceToVertex.wspolrzednaY = mouseEventArgs.GetPosition(this).Y - 45;
+            double X = mouseEventArgs.GetPosition(this).X - 45;
+            double Y = mouseEventArgs.GetPosition(this).Y - 45;
 
+            if (X > 0 && X < 700 && Y > 0 && Y < 230)
+            {
+                    Canvas.SetLeft(ReferenceToVertex, X);
+                    ReferenceToVertex.wspolrzednaX = X;
+                    Canvas.SetTop(ReferenceToVertex, Y);
+                    ReferenceToVertex.wspolrzednaY = Y;
                
 
-
-            foreach (var item in graf.krawedzie)
-            {
-                if (referenceToVertex.id.Equals(item.V1.id))
+                foreach (var item in graf.krawedzie)
                 {
-                   // removeOldEdges.Add(item);
-                   // DrawableCanvas.Children.Remove(item);
-                    item.linia.X1 = referenceToVertex.wspolrzednaX+15;
-                    item.linia.Y1 = referenceToVertex.wspolrzednaY+15;
+                    if (ReferenceToVertex.id.Equals(item.V1.id))
+                    {
+                        item.linia.X1 = ReferenceToVertex.wspolrzednaX + 15;
+                        item.linia.Y1 = ReferenceToVertex.wspolrzednaY + 15;
 
-                    Canvas.SetLeft(item.label, (item.linia.X1 + item.linia.X2) / 2);
-                    Canvas.SetTop(item.label, (item.linia.Y1 + item.linia.Y2) / 2);
+                        Canvas.SetLeft(item.label, (item.linia.X1 + item.linia.X2) / 2);
+                        Canvas.SetTop(item.label, (item.linia.Y1 + item.linia.Y2) / 2);
 
-                }
-                if (referenceToVertex.id.Equals(item.V2.id))
-                {
-                  //  removeOldEdges.Add(item);
-                    // DrawableCanvas.Children.Remove(item);
-                    item.linia.X2 = referenceToVertex.wspolrzednaX+15;
-                    item.linia.Y2 = referenceToVertex.wspolrzednaY+15;
+                    }
+
+                    if (ReferenceToVertex.id.Equals(item.V2.id))
+                    {
+                        item.linia.X2 = ReferenceToVertex.wspolrzednaX + 15;
+                        item.linia.Y2 = ReferenceToVertex.wspolrzednaY + 15;
 
 
-                    Canvas.SetLeft(item.label, (item.linia.X1 + item.linia.X2) / 2);
-                    Canvas.SetTop(item.label, (item.linia.Y1 + item.linia.Y2) / 2);
+                        Canvas.SetLeft(item.label, (item.linia.X1 + item.linia.X2) / 2);
+                        Canvas.SetTop(item.label, (item.linia.Y1 + item.linia.Y2) / 2);
+                    }
                 }
             }
 
         }
 
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Umozliwia dodanie krawedzi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DodajKrawedz(object sender, RoutedEventArgs e)
         {
-            krawedz = true;
-            referenceToVertex = null;
-            anotherVertex = null;
+            Krawedz = true;
+            ReferenceToVertex = null;
+            AnotherVertex = null;
             if (Waga.Text == "0" || Waga.Text == "00" || Waga.Text == "000" || Waga.Text == "0000")
             {
                 Waga.Text = "1";
@@ -236,7 +264,12 @@ namespace graphproject
             this.Cursor = Cursors.Cross;
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Wyznacza wynikowa macierz
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WyznaczMacierz(object sender, RoutedEventArgs e)
         {
             int[,] macierzWagInts = new int[graf.wierzcholki.Count, graf.wierzcholki.Count];
             string[] macierzNazwStrings = new string[graf.wierzcholki.Count];
@@ -286,16 +319,20 @@ namespace graphproject
             Algorytm FloydWarshall = new Algorytm();
             FloydWarshall.FloydWarshall(macierzWagInts);
 
-            Matrix outputMatrix = new Matrix(FloydWarshall.MacierzWag, FloydWarshall.MacierzNazw, macierzNazwStrings);
+            Matrix outputMatrix = new Matrix(FloydWarshall.MacierzWag, FloydWarshall.MacierzNazw, macierzNazwStrings, graf.krawedzie, DrawableCanvas);
             outputMatrix.ShowDialog();
 
         }
-
+        /// <summary>
+        /// Umozliwia resetowanie canvasa
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResetBtn_Click(object sender, RoutedEventArgs e)
         {
-            referenceToVertex = null;
-            anotherVertex = null;
-            idWierzcholka = 0;
+            ReferenceToVertex = null;
+            AnotherVertex = null;
+            IdWierzcholka = 0;
             foreach (var item in graf.wierzcholki)
             {
                 DrawableCanvas.Children.Remove(item);
@@ -312,7 +349,11 @@ namespace graphproject
             tempCity = "Podaj Miasto";
             NazwaWierzcholka.Text = tempCity;
         }
-
+        /// <summary>
+        /// Messagebox z autorami
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void onAutorzy_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("System najkrótszych połączeń kolejowych między wybranymi miejscowościami w oparciu o algorytm Floyda-Warshalla. Autorzy projektu: \n\n- Michał Kocisz\n\n- Kamil Paździorek\n\n- Grzegorz Jarząbek\n\n\u00a9 2018 SGGW - Grafy i Sieci", "Autorzy",

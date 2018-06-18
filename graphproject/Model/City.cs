@@ -9,7 +9,7 @@ namespace graphproject.Model
     public class City
     {
         private List<string> miasta;
-        private readonly Random rd = new Random();
+        private readonly Random rd;
         public string Miasta
         {
             get
@@ -25,24 +25,49 @@ namespace graphproject.Model
             }
         }
 
+        public List<string> MiastaList { get; private set; }
+
         public City()
         {
-            miasta = new List<string>();
-            miasta.Add("Gdańsk");
-            miasta.Add("Gdynia");
-            miasta.Add("Szczecin");
-            miasta.Add("Olsztyn");
-            miasta.Add("Łódź");
-            miasta.Add("Kraków");
-            miasta.Add("Poznań");
-            miasta.Add("Warszawa");
-            miasta.Add("Wrocław");
-            miasta.Add("Kielce");
-            miasta.Add("Opole");
-            miasta.Add("Lublin");
-            miasta.Add("Bydgoszcz");
-            miasta.Add("Katowice");
-            miasta.Add("Rzeszów");
+            rd = new Random();
+
+            miasta = new List<string>
+            {
+                "Gdańsk",
+                "Gdynia",
+                "Szczecin",
+                "Olsztyn",
+                "Łódź",
+                "Kraków",
+                "Poznań",
+                "Warszawa",
+                "Wrocław",
+                "Kielce",
+                "Opole",
+                "Lublin",
+                "Bydgoszcz",
+                "Katowice",
+                "Rzeszów"
+            };
+
+            MiastaList = new List<string>
+            {
+                "Gdańsk",
+                "Gdynia",
+                "Szczecin",
+                "Olsztyn",
+                "Łódź",
+                "Kraków",
+                "Poznań",
+                "Warszawa",
+                "Wrocław",
+                "Kielce",
+                "Opole",
+                "Lublin",
+                "Bydgoszcz",
+                "Katowice",
+                "Rzeszów"
+            };
         }
 
         public void Dodaj_Miasto(string m)
