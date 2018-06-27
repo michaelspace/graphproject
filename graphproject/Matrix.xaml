@@ -9,11 +9,12 @@
         Height="500"
         Width="500"
         SizeToContent="WidthAndHeight"
+        Closing="Matrix_OnClosing"
         >
     <Grid Name="myOutputGrid" Margin="50"  >
         
             
 
 
-        </Grid>
+    </Grid>
 </Window>

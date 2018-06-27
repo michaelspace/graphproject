@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,33 +25,51 @@ namespace graphproject
     /// </summary>
     public partial class Matrix : Window
     {
-        private Canvas dCanvas;
-        private List<Edge> krawedzie;
-        private int[,] macierzWagInts;
-        private string[,] macierzNazwMiast;
-        private string[] macierzNazwStrings;
-        private int rozmiar;
+        private readonly Canvas _dCanvas;
+        private readonly List<Edge> _krawedzie;
+        private readonly int[,] _macierzWagInts;
+        private readonly string[,] _macierzNazwMiast;
+
+        public string[] MacierzNazwStrings { get; set; }
+
+        public int Rozmiar { get; }
+
+        public string[,] MacierzNazwMiast => _macierzNazwMiast;
+
+        public int[,] MacierzWagInts => _macierzWagInts;
+
+        public List<Edge> Krawedzie => _krawedzie;
+
+        public Canvas DCanvas => _dCanvas;
 
         public Matrix(int[,] wagi, string[,] macierzNazw, string[] nazwy, List<Edge> kr, Canvas d)
         {
             InitializeComponent();
-            krawedzie = kr;
-            dCanvas = d;
-            macierzWagInts = wagi;
-            macierzNazwMiast = macierzNazw;
-            macierzNazwStrings = nazwy;
-            rozmiar = nazwy.Length;
+            _krawedzie = kr;
+            _dCanvas = d;
+            _macierzWagInts = wagi;
+            _macierzNazwMiast = macierzNazw;
+            MacierzNazwStrings = nazwy;
+            Rozmiar = nazwy.Length;
 
-            if (rozmiar >1)
+            this.InitializeWindow();
+        }
+
+        /// <summary>
+        /// This method initializes the matrix window. Adds the rows, columns, routes with some events.
+        /// </summary>
+        private void InitializeWindow()
+        {
+            if (Rozmiar > 1)
             {
-                for (int i = 0; i <=rozmiar ; i++)
+                for (int i = 0; i <= Rozmiar; i++)
                 {
 
                     myOutputGrid.ColumnDefinitions.Add(new ColumnDefinition());
                     myOutputGrid.RowDefinitions.Add(new RowDefinition());
-                    for (int j = 0; j <= rozmiar; j++)
+                    for (int j = 0; j <= Rozmiar; j++)
                     {
-                         var rectangle = new Rectangle()
+                        var rectangle = new Rectangle()
                         {
                             Stroke = Brushes.Blue,
                             Fill = Brushes.Transparent
@@ -59,29 +78,29 @@ namespace graphproject
                         Grid.SetRow(rectangle, i);
                         Grid.SetColumn(rectangle, j);
                     }
-                   
+
 
                 }
-                for (int i = 1; i <= rozmiar; i++)
+                for (int i = 1; i <= Rozmiar; i++)
                 {
                     var label1 = new Label()
                     {
-                        Content = macierzNazwStrings[i-1],
+                        Content = MacierzNazwStrings[i - 1],
                         HorizontalAlignment = HorizontalAlignment.Center,
                         VerticalAlignment = VerticalAlignment.Center
 
                     };
                     var label2 = new Label()
                     {
-                        Content = macierzNazwStrings[i - 1],
+                        Content = MacierzNazwStrings[i - 1],
                         HorizontalAlignment = HorizontalAlignment.Center,
                         VerticalAlignment = VerticalAlignment.Center
 
                     };
 
                     myOutputGrid.Children.Add(label1);
-                    Grid.SetRow(label1,0);
-                    Grid.SetColumn(label1,i);
+                    Grid.SetRow(label1, 0);
+                    Grid.SetColumn(label1, i);
 
                     myOutputGrid.Children.Add(label2);
                     Grid.SetRow(label2, i);
@@ -90,77 +109,44 @@ namespace graphproject
 
                 }
 
-
-                //for (int i = 0; i < rozmiar; i++)
-                //{
-                //    for (int j = 0; j < rozmiar; j++)
-                //    {
-                //        if (i==j)
-                //        {
-                //            macierzNazwMiast[i, j] = "-";
-                //        }
-                //        else if (macierzWagInts[i, j] >= 1073741822)
-                //        {
-                //            macierzNazwMiast[i, j] = "-";
-                //        }
-                //        else
-                //        {
-                //            string[] tmp = macierzNazwMiast[i, j].Split('.');
-                //            string prev_id = tmp[tmp.Length - 2];
-
-                //            try
-                //            {
-                //                int id;
-                //                bool correct_id = int.TryParse(prev_id, out id);
-                //                macierzNazwMiast[i, j] = macierzNazwStrings[id-1];
-                //            }
-                //            catch (Exception e)
-                //            {
-                //                Console.WriteLine(e);
-                //                throw;
-                //            }
-                //        }
-                //    }
-                //}
-
-                for (int i = 0; i < rozmiar; i++)
+                for (int i = 0; i < Rozmiar; i++)
                 {
-                    for (int j = 0; j < rozmiar; j++)
+                    for (int j = 0; j < Rozmiar; j++)
                     {
                         if (i == j)
                         {
-                            macierzNazwMiast[i, j] = "-";
+                            _macierzNazwMiast[i, j] = "-";
                         }
-                        else if (macierzWagInts[i, j] >= 1073741822)
+                        else if (_macierzWagInts[i, j] >= 1073741822)
                         {
-                            macierzNazwMiast[i, j] = "-";
+                            _macierzNazwMiast[i, j] = "-";
                         }
                         else
                         {
-                            string[] tmp = macierzNazwMiast[i, j].Split('.');
+                            string[] tmp = _macierzNazwMiast[i, j].Split('.');
                             int[] index = new int[tmp.Length];
 
                             try
                             {
                                 for (int k = 0; k < tmp.Length; k++)
                                 {
-                                    bool correct_id = int.TryParse(tmp[k], out index[k]);
+                                    bool correctId = int.TryParse(tmp[k], out index[k]);
                                 }
-                                macierzNazwMiast[i, j] = String.Empty;
+                                _macierzNazwMiast[i, j] = String.Empty;
                                 for (int k = 0; k < index.Length; k++)
                                 {
                                     if (k != index.Length - 1)
                                     {
-                                        macierzNazwMiast[i, j] = String.Concat(macierzNazwMiast[i, j],
-                                            macierzNazwStrings[index[k] - 1], "-");
+                                        _macierzNazwMiast[i, j] = String.Concat(_macierzNazwMiast[i, j],
+                                            MacierzNazwStrings[index[k] - 1], "-");
                                     }
                                     else
                                     {
-                                        macierzNazwMiast[i, j] = String.Concat(macierzNazwMiast[i, j],
-                                            macierzNazwStrings[index[k] - 1]);
+                                        _macierzNazwMiast[i, j] = String.Concat(_macierzNazwMiast[i, j],
+                                            MacierzNazwStrings[index[k] - 1]);
                                     }
                                 }
-                                
+
                             }
                             catch (Exception e)
                             {
@@ -171,76 +157,64 @@ namespace graphproject
                     }
                 }
 
-                for (int i = 1; i <=rozmiar ; i++)
+                for (int i = 1; i <= Rozmiar; i++)
                 {
-                    for (int j = 1; j <=rozmiar ; j++)
+                    for (int j = 1; j <= Rozmiar; j++)
                     {
-                        if (i != j && macierzWagInts[i-1,j-1]<1073741822)
+                        if (i != j && _macierzWagInts[i - 1, j - 1] < 1073741822)
                         {
                             var label = new Label()
                             {
-                                Content =  macierzWagInts[i - 1, j - 1],/* = macierzNazwMiast[i - 1, j - 1] + ": " +macierzWagInts[i - 1, j - 1]*/
+                                Content = _macierzWagInts[i - 1, j - 1],
                                 HorizontalAlignment = HorizontalAlignment.Center,
                                 VerticalAlignment = VerticalAlignment.Center
-                                
 
                             };
-                            label.MouseEnter += delegate(object sender, MouseEventArgs args) {
+                            label.MouseEnter += delegate (object sender, MouseEventArgs args)
+                            {
                                 var tmp = sender as Label;
                                 tmp.Background = Brushes.Chocolate;
                             };
-                            label.MouseLeave += delegate(object sender, MouseEventArgs args) {
+                            label.MouseLeave += delegate (object sender, MouseEventArgs args)
+                            {
                                 var tmp = sender as Label;
                                 tmp.Background = Brushes.Transparent;
                             };
-                            label.MouseLeftButtonDown += delegate(object s, MouseButtonEventArgs a)
+                            label.MouseLeftButtonDown += delegate (object s, MouseButtonEventArgs a)
                             {
                                 var tmp = s as Label;
                                 tmp.Background = Brushes.Gold;
                             };
-                            label.MouseLeftButtonUp += delegate(object sender, MouseButtonEventArgs args)
+                            label.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs args)
                             {
-                                int row, column;
                                 var lbl = sender as Label;
                                 lbl.Background = Brushes.Transparent;
-                                if (lbl != null)
-                                {
-                                    row = Grid.GetRow(lbl);
-                                    column = Grid.GetColumn(lbl);
-                                    string[] tmp = macierzNazwMiast[row-1, column-1].Split('-');
-                                    if (tmp.Length > 1)
-                                    {
-                                        foreach (var krw in krawedzie)
-                                        {
-                                            dCanvas.Children.Remove(krw);
-                                            krw.linia.Stroke = Brushes.Blue;
-                                            dCanvas.Children.Add(krw);
-                                        }
 
-                                        for (int k = 0; k < tmp.Length; k++)
+                                int row = Grid.GetRow(lbl);
+                                int column = Grid.GetColumn(lbl);
+
+                                string[] tmp = _macierzNazwMiast[row - 1, column - 1].Split('-');
+
+                                if (tmp.Length > 1)
+                                {
+                                    this.ClearMatrix();
+
+                                    for (int k = 0; k < tmp.Length - 1; k++)
+                                    {
+
+                                        foreach (var krw in _krawedzie)
                                         {
-                                            for (int l = 0 ; l < tmp.Length; l++)
+                                            if ((krw.V1.nazwa == tmp[k] || krw.V2.nazwa == tmp[k]) &&
+                                                (krw.V1.nazwa == tmp[k + 1] || krw.V2.nazwa == tmp[k + 1]))
                                             {
-                                                if (k != l)
-                                                {
-                                                    foreach (var krw in krawedzie)
-                                                    {
-                                                        if ((krw.V1.nazwa == tmp[k] || krw.V2.nazwa == tmp[k]) &&
-                                                            (krw.V1.nazwa == tmp[l] || krw.V2.nazwa == tmp[l]))
-                                                        {
-                                                            dCanvas.Children.Remove(krw);
-                                                            krw.linia.Stroke = Brushes.Red;
-                                                            dCanvas.Children.Add(krw);
-                                                        }
-                                                    }
-                                                }
+                                                _dCanvas.Children.Remove(krw);
+                                                krw.linia.Stroke = Brushes.Red;
+                                                _dCanvas.Children.Add(krw);
                                             }
                                         }
+
+
                                     }
-                                }
-                                else
-                                {
-                                    
                                 }
                             };
                             myOutputGrid.Children.Add(label);
@@ -260,7 +234,7 @@ namespace graphproject
                             Grid.SetRow(label, i);
                             Grid.SetColumn(label, j);
                         }
-                        
+
                     }
                 }
 
@@ -269,6 +243,25 @@ namespace graphproject
         }
 
 
-        
+        private void Matrix_OnClosing(object sender, CancelEventArgs e)
+        {
+            this.ClearMatrix();
+        }
+
+        /// <summary>
+        /// Method to clear matrix. Sets red edges to default.
+        /// </summary>
+        private void ClearMatrix()
+        {
+            if (Rozmiar > 1 && Krawedzie.Count > 0)
+            {
+                foreach (var krw in Krawedzie)
+                {
+                    DCanvas.Children.Remove(krw);
+                    krw.linia.Stroke = Brushes.Blue;
+                    DCanvas.Children.Add(krw);
+                }
+            }
+        }
     }
 }
