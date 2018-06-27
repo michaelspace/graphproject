@@ -22,3 +22,5 @@ Użytkownik ma możliwość:
 - kliknięcia na wybrany koszt dojścia, w celu zaznaczenia pełnej ścieżki dojścia (wybrana ścieżka zostanie zaznaczona na czerwono)
 
 - zobaczenia, kto jest autorem projektu (przycisk Autorzy)
+
+![Picture](https://github.com/michaelspace/graphproject/blob/master/pic2.png)
