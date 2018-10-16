@@ -1,26 +1,22 @@
 # Floyd-Warshall algorithm implementation
 
-PL:
-
-<b>Uczelniany projekt z przedmiotu Grafy i Sieci</b>
-
-W oparciu o algorytm Floyda-Warshalla opracować i zaimplementować system najkrótszych połączeń kolejowych między wybranymi miejscowościami w kraju.
-
+Implementacja [algorytmu Floyda-Warshalla](https://pl.wikipedia.org/wiki/Algorytm_Floyda-Warshalla) do znajdowania najkrótszych ścieżek pomiędzy wszystkimi parami wierzchołków w grafie ważonym, stworzona przy pomocy WPF C#.
+<br>
 ![Picture](https://github.com/michaelspace/graphproject/blob/master/pic.png)
+<br>
+Instrukcja:<br>
+1) Należy wprowadzić nazwę wierzchołka. W przeciwnym razie zostanie wylosowana nazwa miasta.<br>
+2) Po kliknięciu przycisku dodawania wierzchołka kliknąć na wybrane miejsce w obszarze grafu.<br>
+3) Aby dodać krawędzie należy wprowadzić wagę, a następnie kliknąć przycisk dodawania krawędzi, kolejno klikając na dwa wierzchołki, pomiędzy którymi ma zostać utworzone połączenie.<br>
+4) Dodane wierzchołki można przesuwać.<br>
+5) Graf może zostać zresetowany.<br>
+6) Aby zobaczyć najkrótsze koszty dojscia dla każdej pary wierzchołków, należy kliknąć przycisk do wygenerowania macierzy kosztów.<br>
+7) By móc zobaczyć ścieżkę między daną parą wierzchołków, należy kliknąć na wybrany koszt. Na grafie kolorem czerwonym zostanie zaznaczona najkrótsza ścieżka między wybraną parą.
 
-Użytkownik ma możliwość:
-- podania nazwy miejscowości (jeśli tego nie zrobi zostanie dobrana losowa miejscowość) oraz umieszczenia tej miejscowości na obszarze rysowania – ustawiono limit na 14 wierzchołków
-
-- utworzenia połączenia miedzy dwiema miejscowościami (aby utworzyć połączenie należy kliknąć przycisk Dodaj Krawędź, a następnie lewym przyciskiem myszy kliknąć kolejno na element startowy i źródłowy)
-
-- przesuwania powstałych wierzchołków (należy trzymając lewy przycisk myszy przesunąć wybrany wierzchołek po obszarze rysowania)
-
-- usunięcia wszystkich wierzchołków i krawędzi poprzez kliknięcie przycisku Resetuj
-
-- wyznaczenia macierzy wynikowej zawierającej nazwy miejscowości oraz najmniejsze koszty dojścia
-
-- kliknięcia na wybrany koszt dojścia, w celu zaznaczenia pełnej ścieżki dojścia (wybrana ścieżka zostanie zaznaczona na czerwono)
-
-- zobaczenia, kto jest autorem projektu (przycisk Autorzy)
+<br>
+Uwagi:<br>
+1) Limit wierzchołków wynosi 14.<br>
+2) W celu uniknięcia ujemnych cykli wagi zostały ograniczone do wartości dodatnich.<br>
+3) Aplikacja jest niedużym uczelnianym projektem.<br>
 
 ![Picture](https://github.com/michaelspace/graphproject/blob/master/pic2.png)
